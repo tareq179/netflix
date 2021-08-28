@@ -1,7 +1,30 @@
 import { InfoOutlined, PlayArrow } from "@material-ui/icons";
+import { useEffect, useState } from "react";
 import './Featured.scss';
+import axios from "axios";
 
 function Featured({type}) {
+  const [content, setContent] = useState({});
+
+  useEffect(()=>{
+    const getRandomContent = async ()=>{
+      try{
+        const res = await axios.get(`/movie/random/?type=${type}`,
+        {
+          headers: {
+            token:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjM3MzBjNjJhMjgyMWRmY2VhODkzMiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYyOTcyNzg5OSwiZXhwIjoxNjMwMTU5ODk5fQ.RcYyDZJaqLysFGjxuWWwKzOPUg4L35lgI4L9Du6JmS8",
+          },
+        }
+        )
+        setContent(res.data[0])
+      }catch(err){
+        console.log(err)
+      }
+    }
+
+    getRandomContent()
+  },[type])
   return (
     <div className="Featured">
       {type && (
@@ -25,16 +48,14 @@ function Featured({type}) {
             </select>
         </div>
       )}
-      <img  src="https://i.ibb.co/44qh8mp/banner.jpg" alt="" />
+      <img  src={content.img} alt="" />
       <div className="info">
         <img
-          src="https://occ-0-1432-1433.1.nflxso.net/dnm/api/v6/LmEnxtiAuzezXBjYXPuDgfZ4zZQ/AAAABUZdeG1DrMstq-YKHZ-dA-cx2uQN_YbCYx7RABDk0y7F8ZK6nzgCz4bp5qJVgMizPbVpIvXrd4xMBQAuNe0xmuW2WjoeGMDn1cFO.webp?r=df1"
+          src={content.imgTitle}
           alt=""
         />
         <span className="desc">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores
-          optio repellat quos ratione sunt fuga id, fugiat veritatis autem
-          libero?
+          {content.desc}
         </span>
         <div className="buttons">
           <button className="play">
