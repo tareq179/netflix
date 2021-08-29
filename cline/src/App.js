@@ -30,6 +30,7 @@ function App() {
         <Route path= "/watch">
           <Watch/>
         </Route>
+        
           </>
         )}
       </Switch>
